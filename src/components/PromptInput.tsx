@@ -4,6 +4,7 @@ import { validatePrompt } from '../utils/validatePrompt';
 interface PromptInputProps {
   onGenerate: (prompt: string) => void;
   isLoading: boolean;
+  history?: string[];
 }
 
 const EXAMPLES = [
@@ -15,7 +16,7 @@ const EXAMPLES = [
   '테이블 행 상세보기 패널. 선택한 고객의 기본 정보와 최근 활동 표시',
 ];
 
-export function PromptInput({ onGenerate, isLoading }: PromptInputProps) {
+export function PromptInput({ onGenerate, isLoading, history = [] }: PromptInputProps) {
   const [prompt, setPrompt] = useState('');
   const promptError = validatePrompt(prompt);
   const canSubmit = prompt.trim() !== '' && !isLoading && !promptError;
@@ -64,6 +65,21 @@ export function PromptInput({ onGenerate, isLoading }: PromptInputProps) {
           </button>
         </div>
       </form>
+
+      {history.length > 0 && (
+        <div className="examples">
+          <p className="examples-label">최근 프롬프트</p>
+          <ul className="examples-list">
+            {history.map((item) => (
+              <li key={item}>
+                <button className="example-item" onClick={() => setPrompt(item)} type="button">
+                  {item}
+                </button>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
 
       <div className="examples">
         <p className="examples-label">예시를 누르면 입력창에 채워집니다</p>

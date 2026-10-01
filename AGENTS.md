@@ -26,12 +26,12 @@
 - 테스트는 `bun run test`(Vitest)로 실행한다. `bun test`는 Bun 내장 러너라 jsdom·jest-dom 설정(`vite.config.ts` test 블록)을 읽지 않는다.
 - `server/` 변경 후에는 위 서버 타입체크 명령을 실행한다. `tsc -b`는 `src`와 `vite.config.ts`만 검사하고 `server/`는 검사하지 않는다 (`tsconfig.app.json:27`, `tsconfig.node.json` include).
 - 타입 import는 `import type`을 쓴다. enum, namespace, 생성자 파라미터 프로퍼티는 쓰지 않는다 (`verbatimModuleSyntax`, `erasableSyntaxOnly`: `tsconfig.app.json:14,22`).
-- Provider를 추가·변경할 때는 중복 정의를 모두 함께 수정한다: `server/index.ts:57`(타입), `server/index.ts:59-62`(ENV_KEYS), `server/index.ts:171`(에러 메시지 분기), `src/types/index.ts:1`(타입), `src/App.tsx:9-12`(PROVIDER_CONFIG).
+- Provider를 추가·변경할 때는 중복 정의를 모두 함께 수정한다: `server/index.ts:57`(타입), `server/index.ts:59-62`(ENV_KEYS), `server/index.ts:171`(에러 메시지 분기), `src/types/index.ts:1`(타입), `src/App.tsx:12-15`(PROVIDER_CONFIG), `src/utils/persistedState.ts`의 `parseProvider`(저장값 검증).
 
 ### Don'ts
 
 - `.env.example`에 실제 키 값을 넣지 마라. 값은 비워둔다. `/commit` 스킬은 `.env.example`을 비밀값 검사에서 제외하므로(`.claude/skills/commit/SKILL.md:35`) 여기 들어간 키는 걸러지지 않고 그대로 커밋된다.
-- 서버 기본 provider(`anthropic`, `server/index.ts:161`)와 UI 기본 provider(`google`, `src/App.tsx:17`)가 다르다는 점을 "통일"하려고 한쪽을 임의로 바꾸지 마라. 바꾼다면 사용자에게 먼저 확인한다.
+- 서버 기본 provider(`anthropic`, `server/index.ts:161`)와 UI 기본 provider(`google`, `src/App.tsx:20`)가 다르다는 점을 "통일"하려고 한쪽을 임의로 바꾸지 마라. 바꾼다면 사용자에게 먼저 확인한다.
 
 ## Project Context
 

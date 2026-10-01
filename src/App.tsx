@@ -3,6 +3,9 @@ import { PromptInput } from './components/PromptInput';
 import { ComponentCard } from './components/ComponentCard';
 import { Window } from './components/Window';
 import { useComponentGenerator } from './hooks/useComponentGenerator';
+import { usePersistentState } from './hooks/usePersistentState';
+import { parseProvider, STORAGE_KEYS } from './utils/persistedState';
+import { addPromptToHistory, parsePromptHistory } from './utils/promptHistory';
 import type { Provider } from './types';
 import './App.css';
 
@@ -14,12 +17,17 @@ const PROVIDER_CONFIG = {
 function App() {
   const [apiKey, setApiKey] = useState('');
   const [showKey, setShowKey] = useState(false);
-  const [provider, setProvider] = useState<Provider>('google');
+  const [provider, setProvider] = usePersistentState<Provider>(STORAGE_KEYS.provider, parseProvider, 'google');
   const [keyMissing, setKeyMissing] = useState(false);
   const [envKeys, setEnvKeys] = useState<Record<Provider, boolean>>({
     anthropic: false,
     google: false,
   });
+  const [promptHistory, setPromptHistory] = usePersistentState<string[]>(
+    STORAGE_KEYS.promptHistory,
+    parsePromptHistory,
+    [],
+  );
   const apiKeyRef = useRef<HTMLInputElement>(null);
   const { components, isLoading, error, generate, removeComponent, clearAll } =
     useComponentGenerator();
@@ -41,6 +49,7 @@ function App() {
       return;
     }
     setKeyMissing(false);
+    setPromptHistory((prev) => addPromptToHistory(prev, prompt));
     generate(prompt, apiKey || undefined, provider);
   };
 
@@ -72,7 +81,7 @@ function App() {
 
       <main className="workspace">
         <Window title="새 컴포넌트" className="composer-window" aria-label="컴포넌트 생성">
-          <PromptInput onGenerate={handleGenerate} isLoading={isLoading} />
+          <PromptInput onGenerate={handleGenerate} isLoading={isLoading} history={promptHistory} />
         </Window>
 
         <Window as="aside" title="실행 설정" className="settings-window" aria-label="실행 설정">
