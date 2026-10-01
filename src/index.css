@@ -1,0 +1,56 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+:root {
+  color-scheme: light;
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+
+  /* Mac OS 8 플래티넘 팔레트 */
+  --ink: #000000;
+  --paper: #ffffff;
+  --platinum: #dddddd;
+  --platinum-dark: #bbbbbb;
+  --shade: #888888;
+  --desktop: #7b7fb5;
+  --desktop-dither: #7175ad;
+  --select: #3333cc;
+  --warn: #cc3300;
+  --ok: #117733;
+
+  --font-pixel: 'Galmuri11', 'NeoDunggeunmo', 'Apple SD Gothic Neo', sans-serif;
+  --font-pixel-mono: 'GalmuriMono11', 'Galmuri11', ui-monospace, Menlo, monospace;
+  --font-text: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', system-ui, sans-serif;
+}
+
+body {
+  min-height: 100vh;
+  font-family: var(--font-pixel);
+  font-size: 13px;
+  color: var(--ink);
+  background-color: var(--desktop);
+  /* 2px 체커 디더 */
+  background-image: repeating-conic-gradient(var(--desktop-dither) 0 25%, transparent 0 50%);
+  background-size: 4px 4px;
+}
+
+button,
+input,
+select,
+textarea {
+  font: inherit;
+  color: inherit;
+}
+
+button {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: var(--select);
+  color: var(--paper);
+}
