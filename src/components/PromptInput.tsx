@@ -1,4 +1,5 @@
 import { useState } from 'react';
+import { validatePrompt } from '../utils/validatePrompt';
 
 interface PromptInputProps {
   onGenerate: (prompt: string) => void;
@@ -16,10 +17,12 @@ const EXAMPLES = [
 
 export function PromptInput({ onGenerate, isLoading }: PromptInputProps) {
   const [prompt, setPrompt] = useState('');
+  const promptError = validatePrompt(prompt);
+  const canSubmit = prompt.trim() !== '' && !isLoading && !promptError;
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
-    if (prompt.trim() && !isLoading) {
+    if (canSubmit) {
       onGenerate(prompt.trim());
     }
   };
@@ -37,18 +40,25 @@ export function PromptInput({ onGenerate, isLoading }: PromptInputProps) {
           placeholder="예: 고객 목록 테이블 위에 들어갈 검색 필터 바. 상태, 담당자, 날짜 범위 필터가 필요해."
           className="prompt-textarea"
           rows={4}
+          aria-invalid={promptError !== null}
+          aria-describedby={promptError ? 'prompt-error' : undefined}
           onKeyDown={(e) => {
             if (e.key === 'Enter' && (e.metaKey || e.ctrlKey)) {
               handleSubmit(e);
             }
           }}
         />
+        {promptError && (
+          <p id="prompt-error" className="prompt-error" role="alert">
+            {promptError}
+          </p>
+        )}
         <div className="prompt-actions">
           <span className="prompt-hint">⌘ + Enter로도 생성됩니다</span>
           <button
             type="submit"
             className="btn btn--default"
-            disabled={!prompt.trim() || isLoading}
+            disabled={!canSubmit}
           >
             {isLoading ? '생성 중...' : '컴포넌트 생성'}
           </button>

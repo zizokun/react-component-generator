@@ -255,6 +255,12 @@ input::placeholder {
   color: var(--shade);
 }
 
+.prompt-error {
+  margin: 0;
+  color: var(--warn);
+  font-weight: 600;
+}
+
 .prompt-actions {
   display: flex;
   align-items: center;
